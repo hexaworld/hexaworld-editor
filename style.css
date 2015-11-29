@@ -1,0 +1,46 @@
+html,
+body {
+  font: 16px/1.2 "Helvetica Neue", Helvetica, arial, sans-serif;
+  color: rgb(220,220,220);
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  font-weight: 300;
+  background: rgb(100,100,100);
+}
+
+hr {
+  border-color: rgb(220,220,220);
+}
+
+#editor {
+  width: 50%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  position: absolute;
+}
+
+#game {
+  position: relative;
+  background: rgb(100,100,100);
+}
+
+#sidebar {
+  width: 45%;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-left: dotted 5px rgb(220,220,220);
+}
+
+#sidebar-inner {
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+
+.tile-icon {
+  margin-right: 15px;
+  margin-bottom: 10px;
+}

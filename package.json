@@ -1,0 +1,38 @@
+{
+  "name": "hexaworld-editor",
+  "version": "1.0.0",
+  "description": "editor for designing hexaworlds",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run watch & npm run server",
+    "server": "nodemon --exec http-server -e js,css,html",
+    "watch": "watchify index.js -o bundle.js",
+    "bundle": "browserify index.js -o bundle.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hexaworld/hexaworld-editor.git"
+  },
+  "keywords": [
+    "game",
+    "hexagon",
+    "hexaworld",
+    "crtrdg",
+    "2d",
+    "geometry",
+    "editor"
+  ],
+  "author": "freeman-lab",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hexaworld/hexaworld-editor/issues"
+  },
+  "homepage": "https://github.com/hexaworld/hexaworld-editor#readme",
+  "dependencies": {
+    "crtrdg-gameloop": "^0.2.2",
+    "crtrdg-keyboard": "0.0.2",
+    "interact.js": "^1.2.6",
+    "lodash": "^3.10.1"
+  }
+}
