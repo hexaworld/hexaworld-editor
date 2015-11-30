@@ -9,13 +9,11 @@ var Player = require('hexaworld/player.js')
 var Game = require('crtrdg-gameloop')
 var Keyboard = require('crtrdg-keyboard')
 
-var editor = document.getElementById('editor')
-
-var game = new Game({
-  canvas: 'game',
-  width: editor.clientWidth,
-  height: editor.clientHeight
-})
+var editorContainer = document.getElementById('editor-container')
+var editor = document.createElement('canvas')
+editor.setAttribute('width', editorContainer.clientWidth + 'px')
+editor.setAttribute('height', editorContainer.clientHeight + 'px')
+editorContainer.appendChild(editor)
 
 var pathSet = [
   [], 
@@ -23,7 +21,7 @@ var pathSet = [
   [0,1,2,3,4,5],
   [0,1], [0, 2], [0, 3],
   [0,1,2], [0,2,4], [0,1,3], [0,1,4],
-  [0,1,2,3], [0,1,2,4], [0,1,2,3,4]
+  [0,1,2,3], [0,1,2,4], [0,1,3,4], [0,1,2,3,4]
 ]
 
 var pathGroups = [2, 5, 9]
@@ -73,9 +71,9 @@ makeIcons()
 drawIcons()
 
 function getposition(event) {
-  var x = event.pageX - game.width/2
-  var y = event.pageY - game.width/2
-  if (_.all([x > -game.width/2, x < game.width/2, y > -game.height/2, y < game.height/2])) {
+  var x = event.pageX - editor.width/2
+  var y = event.pageY - editor.height/2
+  if (_.all([x > -editor.width/2, x < editor.width/2, y > -editor.height/2, y < editor.height/2])) {
     return camera.transform.apply([[x, y]])[0]
   }
 }
@@ -86,7 +84,7 @@ _.forEach(document.getElementsByClassName('tile-icon'), function(icon) {
     pathSet[id] = _.map(pathSet[id], function(i) {return (i + 1 > 5) ? 0 : (i + 1)})
     tileSet[id] = tile({
       position: [0, 0], 
-      scale: 60, 
+      scale: iconSize/2, 
       paths: pathSet[id],
       thickness: 1
     })
@@ -97,7 +95,6 @@ _.forEach(document.getElementsByClassName('tile-icon'), function(icon) {
 interact('.tile-icon').draggable({
 
   onmove: function (event) {
-    console.log(event)
     var target = event.target
     var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
     var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
@@ -119,6 +116,7 @@ interact('.tile-icon').draggable({
         return location == i
       })
     }
+    drawEditor()
   },
 
   onend: function (event) {
@@ -140,16 +138,18 @@ interact('.tile-icon').draggable({
     target.style.webkitTransform = target.style.transform = 'translate(0px, 0px)'
     target.setAttribute('data-x', 0)
     target.setAttribute('data-y', 0)
+    drawEditor()
   }
 })
 
+var keyboard = new Keyboard()
 var camera = new Camera({
   scale: 0.7,
   speed: {position: .5, angle: .1, scale: .002},
-  friction: 0.9,
+  friction: 1,
 })
+camera.game = {width: editor.width, height: editor.height}
 
-var keyboard = new Keyboard(game)
 var world = new World()
 var init = [
   [0, 0], [0, 1], [0, -1], [0, -2], [0, 2],
@@ -167,15 +167,26 @@ world.tiles = init.map(function (p) {
   })
 })
 
-camera.addTo(game)
-world.addTo(game)
-
-camera.on('update', function(interval) {
-  this.move(keyboard)
+keyboard.on('keydown', function(key) {
+  if (key === '<up>') {
+    camera.transform.position[1] -= 50
+  }
+  if (key === '<down>') {
+    camera.transform.position[1] += 50
+  }
+  if (key === '<left>') {
+    camera.transform.position[0] -= 50
+  }
+  if (key === '<right>') {
+    camera.transform.position[0] += 50
+  }
+  drawEditor()
 })
 
-
-game.on('draw', function(context) {
+function drawEditor() {
+  var context = editor.getContext('2d')
+  context.clearRect(0, 0, editor.width, editor.height)
   world.draw(context, camera)
-  //player.draw(context, camera)
-})
+}
+
+drawEditor()

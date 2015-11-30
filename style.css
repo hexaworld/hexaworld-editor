@@ -16,7 +16,7 @@ h1 {
   font-size: 42px;
 }
 
-#editor {
+#editor-container {
   width: 55%;
   height: 100%;
   left: 0;
@@ -36,7 +36,7 @@ h1 {
   right: 0;
   top: 0;
   border-left: dotted 5px rgb(220,220,220);
-  background: rgb(120,120,120);
+  background: rgb(130,130,130);
 }
 
 #sidebar-inner {
