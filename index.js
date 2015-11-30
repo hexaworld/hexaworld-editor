@@ -17,7 +17,7 @@ var game = new Game({
   height: editor.clientHeight
 })
 
-var pathset = [
+var pathSet = [
   [], 
   [0], 
   [0,1,2,3,4,5],
@@ -26,42 +26,43 @@ var pathset = [
   [0,1,2,3], [0,1,2,4], [0,1,2,3,4]
 ]
 
-var pathgroups = [2, 5, 9]
+var pathGroups = [2, 5, 9]
+var iconSize = 100
 
-var tileset = pathset.map( function(paths) {
+var tileSet = pathSet.map( function(paths) {
   return tile({
     position: [0, 0],
-    scale: 60,
+    scale: iconSize / 2,
     paths: paths,
     thickness: 1
   })
 })
 
 var mask = new Mask({
-  size: 1 * 100/2,
-  position: [100/2, 100/2],
+  size: 1 * iconSize/2,
+  position: [iconSize/2, iconSize/2],
   fill: 'rgb(90,90,90)',
   orientation: 'flat'
 })
 
 function makeIcons() {
-  tileset.forEach( function (tile, i) {
+  tileSet.forEach( function (tile, i) {
     var canvas = document.createElement('canvas')
     canvas.setAttribute('width', '100px')
     canvas.setAttribute('height', '100px')
     canvas.id = i
     canvas.className = 'tile-icon icon'
-    document.getElementById('tileset').appendChild(canvas)
-    if (pathgroups.indexOf(i) > -1) {
-      document.getElementById('tileset').appendChild(document.createElement('hr'))
+    document.getElementById('tileSet').appendChild(canvas)
+    if (pathGroups.indexOf(i) > -1) {
+      document.getElementById('tileSet').appendChild(document.createElement('hr'))
     }
   })
 }
 
 function drawIcons() {
-  tileset.forEach( function (tile, i) {
+  tileSet.forEach( function (tile, i) {
     var context = document.getElementById(i).getContext('2d')
-    var camera = {transform: transform(), game: {width: 100, height: 100}}
+    var camera = {transform: transform(), game: {width: iconSize, height: iconSize}}
     mask.set(context)
     tile.draw(context, camera)
     mask.unset(context)
@@ -82,11 +83,11 @@ function getposition(event) {
 _.forEach(document.getElementsByClassName('tile-icon'), function(icon) {
   icon.addEventListener('click', function (item) {
     var id = icon.id
-    pathset[id] = _.map(pathset[id], function(i) {return (i + 1 > 5) ? 0 : (i + 1)})
-    tileset[id] = tile({
+    pathSet[id] = _.map(pathSet[id], function(i) {return (i + 1 > 5) ? 0 : (i + 1)})
+    tileSet[id] = tile({
       position: [0, 0], 
       scale: 60, 
-      paths: pathset[id],
+      paths: pathSet[id],
       thickness: 1
     })
     drawIcons()
@@ -131,7 +132,7 @@ interact('.tile-icon').draggable({
       var t = tile({
         position: [q, r],
         scale: 50,
-        paths: pathset[target.id],
+        paths: pathSet[target.id],
         thickness: 0.75
       })
       world.tiles.push(t)
@@ -189,5 +190,5 @@ player.on('update', function(interval) {
 
 game.on('draw', function(context) {
   world.draw(context, camera)
-  player.draw(context, camera)
+  //player.draw(context, camera)
 })
