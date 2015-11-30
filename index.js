@@ -5,6 +5,7 @@ var tile = require('hexaworld/geo/tile.js')
 var Mask = require('hexaworld/mask.js')
 var World = require('hexaworld/world.js')
 var Camera = require('hexaworld/camera.js')
+var Player = require('hexaworld/player.js')
 var Game = require('crtrdg-gameloop')
 var Keyboard = require('crtrdg-keyboard')
 
@@ -95,6 +96,7 @@ _.forEach(document.getElementsByClassName('tile-icon'), function(icon) {
 interact('.tile-icon').draggable({
 
   onmove: function (event) {
+    console.log(event)
     var target = event.target
     var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
     var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
@@ -109,7 +111,7 @@ interact('.tile-icon').draggable({
     if (position) {
       var location = world.locate(position)
       if (location > -1) {
-        world.tiles[location].props.stroke = 'white'
+        world.tiles[location].props.stroke = 'rgb(100, 200, 112)'
         world.tiles[location].props.thickness = 10
       }
       world.tiles = _.sortBy(world.tiles, function (tile, i) {
@@ -140,7 +142,6 @@ interact('.tile-icon').draggable({
   }
 })
 
-
 var camera = new Camera({
   scale: 0.7,
   speed: {position: .5, angle: .1, scale: .002},
@@ -150,9 +151,13 @@ var camera = new Camera({
 var keyboard = new Keyboard(game)
 var world = new World()
 var init = [
-  [0, 0], [-1, 1], [-1, 0], [0, -1],
-  [1, 0], [0, 1], [1, -1]
+  [0, 0], [0, 1], [0, -1], [0, -2], [0, 2],
+  [1, 0], [1, -1], [1, -2], [1, 1],
+  [-1, 1], [-1, 0], [-1, -1], [-1, 2],
+  [-2, 1], [-2, 0], [-2, -1], [-2, 2], [-2, 3],
+  [2, 0], [2, -1], [2, -2], [2, -3], [2, 1]
 ]
+
 world.tiles = init.map(function (p) {
   return tile({
     position: p, 
@@ -161,13 +166,28 @@ world.tiles = init.map(function (p) {
   })
 })
 
+var player = new Player({
+  scale: 2,
+  speed: {position: 1, angle: 8},
+  friction: 0.9,
+  stroke: 'white',
+  fill: 'rgb(75,75,75)',
+  thickness: 0.5
+});
+
 camera.addTo(game)
 world.addTo(game)
+player.addTo(game)
 
 camera.on('update', function(interval) {
   this.move(keyboard)
 })
 
+player.on('update', function(interval) {
+  this.move(keyboard, world)
+});
+
 game.on('draw', function(context) {
   world.draw(context, camera)
+  player.draw(context, camera)
 })

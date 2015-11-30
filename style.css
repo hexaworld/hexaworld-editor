@@ -1,6 +1,6 @@
 html,
 body {
-  font: 16px/1.2 "Helvetica Neue", Helvetica, arial, sans-serif;
+  font: 16px/1.2 "Hack", Helvetica, arial, sans-serif;
   color: rgb(220,220,220);
   -webkit-font-smoothing: antialiased;
   font-smoothing: antialiased;
@@ -9,11 +9,15 @@ body {
 }
 
 hr {
-  border-color: rgb(220,220,220);
+  border: dotted 2px rgb(220,220,220);
+}
+
+h1 {
+  font-size: 42px;
 }
 
 #editor {
-  width: 50%;
+  width: 55%;
   height: 100%;
   left: 0;
   top: 0;
@@ -32,6 +36,7 @@ hr {
   right: 0;
   top: 0;
   border-left: dotted 5px rgb(220,220,220);
+  background: rgb(120,120,120);
 }
 
 #sidebar-inner {
@@ -42,5 +47,4 @@ hr {
 
 .tile-icon {
   margin-right: 15px;
-  margin-bottom: 10px;
 }
