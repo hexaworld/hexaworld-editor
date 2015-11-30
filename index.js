@@ -39,7 +39,7 @@ var tileSet = pathSet.map( function(paths) {
 })
 
 var mask = new Mask({
-  size: 1 * iconSize/2,
+  size: 0.95 * iconSize/2,
   position: [iconSize/2, iconSize/2],
   fill: 'rgb(90,90,90)',
   orientation: 'flat'
@@ -167,26 +167,13 @@ world.tiles = init.map(function (p) {
   })
 })
 
-var player = new Player({
-  scale: 2,
-  speed: {position: 1, angle: 8},
-  friction: 0.9,
-  stroke: 'white',
-  fill: 'rgb(75,75,75)',
-  thickness: 0.5
-});
-
 camera.addTo(game)
 world.addTo(game)
-player.addTo(game)
 
 camera.on('update', function(interval) {
   this.move(keyboard)
 })
 
-player.on('update', function(interval) {
-  this.move(keyboard, world)
-});
 
 game.on('draw', function(context) {
   world.draw(context, camera)
