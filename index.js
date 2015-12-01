@@ -7,7 +7,6 @@ var Mask = require('hexaworld/mask.js')
 var World = require('hexaworld/world.js')
 var Camera = require('hexaworld/camera.js')
 var Player = require('hexaworld/player.js')
-var Game = require('crtrdg-gameloop')
 var Keyboard = require('crtrdg-keyboard')
 
 var editorContainer = document.getElementById('editor-container')
@@ -25,7 +24,7 @@ var paths = [
   [0,1,2,3], [0,1,2,4], [0,1,3,4], [0,1,2,3,4]
 ]
 
-var colors = [
+var cues = [
   '#FF5050', 
   '#FF8900', 
   '#00C3EE', 
@@ -37,7 +36,7 @@ var size = 100
 
 var icons = {
 
-  tiles: paths.map( function (p) {
+  tile: paths.map( function (p) {
     return tile({
       position: [0, 0],
       scale: size / 2,
@@ -46,14 +45,16 @@ var icons = {
     })
   }),
 
-  landmarks: colors.map( function (c) {
+  landmark: cues.map( function (c) {
     return circle({
       fill: c,
       stroke: 'white', 
       thickness: 3, 
       scale: 15
     })
-  })
+  }),
+
+  blank: [circle({fill: 'rgb(90,90,90)'})]
 
 }
 
@@ -81,17 +82,19 @@ function drawIcon(i, label) {
   mask.unset(context)
 }
 
-_.forEach(_.range(icons.tiles.length), function(i) {
-  makeIcon(i, 'tiles')
-  drawIcon(i, 'tiles')
+_.forEach(_.range(icons.tile.length), function(i) {
+  makeIcon(i, 'tile')
+  drawIcon(i, 'tile')
   if (groups.indexOf(i) > -1) {
-    document.getElementById('tiles').appendChild(document.createElement('hr'))
+    document.getElementById('tile').appendChild(document.createElement('hr'))
   }
 })
 
-_.forEach(_.range(icons.landmarks.length), function(i) {
-  makeIcon(i, 'landmarks')
-  drawIcon(i, 'landmarks')
+_.forEach(_.range(icons.landmark.length), function(i) {
+  makeIcon(i, 'landmark')
+  drawIcon(i, 'landmark')
+})
+
 })
 
 function getPosition(event) {
@@ -102,7 +105,7 @@ function getPosition(event) {
   }
 }
 
-_.forEach(document.getElementsByClassName('tiles-icon'), function(icon) {
+_.forEach(document.getElementsByClassName('tile-icon'), function(icon) {
   icon.addEventListener('click', function (item) {
     var d
     if (item.offsetY > 0 && item.offsetY < size) {
@@ -112,13 +115,13 @@ _.forEach(document.getElementsByClassName('tiles-icon'), function(icon) {
     if (d) {
       var id = parseInt(icon.id.split('-')[1])
       paths[id] = _.map(paths[id], function(i) {return ((i + d) % 6) < 0 ? 5 : ((i + d) % 6) })
-      icons.tiles[id] = tile({
+      icons.tile[id] = tile({
         position: [0, 0], 
         scale: size/2, 
         paths: paths[id],
         thickness: 1
       })
-      drawIcon(id, 'tiles')
+      drawIcon(id, 'tile')
     }
   })
 })
@@ -139,7 +142,6 @@ interact('.icon').draggable({
     var position = getPosition(event)
     if (position) {
       var location = world.locate(position)
-      console.log(location)
       if (location > -1) {
         world.tiles[location].props.stroke = 'rgb(100, 200, 112)'
         world.tiles[location].props.thickness = 10
@@ -155,37 +157,35 @@ interact('.icon').draggable({
     var target = event.target
     var position = getPosition(event)
     if (position) {
-      var location = world.locate(position)
-      if (location > -1) world.tiles.splice(location, 1)
       var q = Math.round(position[0] * 2/3 / 50)
       var r = Math.round((-position[0] / 3 + Math.sqrt(3)/3 * position[1]) / 50)
+      var location = _.findIndex(schema, function(item) {
+        return item.position[0] === q && item.position[1] === r 
+      })
 
-      if (target.className.split(' ')[0] == 'tiles-icon') {        
-        var t = tile({
-          position: [q, r],
-          scale: 50,
-          paths: paths[parseInt(target.id.split('-')[1])],
-          thickness: 0.75
-        })
-        world.tiles.push(t)
+      if (target.className.split(' ')[0] == 'tile-icon') {    
+        var id = parseInt(target.id.split('-')[1])
+        if (location > -1) {
+          schema[location].paths = paths[id]
+        } else {
+          schema.push({position: [q, r], paths: paths[id]})
+        }
+        rebuildWorld()
+      }
+
+      if (target.className.split(' ')[0] == 'landmark-icon') {
+        var id = parseInt(target.id.split('-')[1])
+        if (location > -1) {
+          schema[location].cue = cues[id]
+        }
+        rebuildWorld()
       }
 
       if (target.className.split(' ')[0] == 'landmarks-icon') {
         if (location > -1) {
-          var t = tile({
-            position: [q, r],
-            scale: 50,
-            paths: [],
-            thickness: 0.75,
-            children: circle({
-              fill: colors[parseInt(target.id.split('-')[1])],
-              stroke: 'white', 
-              thickness: 1, 
-              scale: 0.15
-            })
-          })
-          world.tiles.push(t)
+          schema[location].cue = []
         }
+        rebuildWorld()
       }
     
     }
@@ -204,22 +204,33 @@ var camera = new Camera({
 })
 camera.game = {width: editor.width, height: editor.height}
 
-var world = new World()
-var init = [
-  [0, -2], [0, -1], [0, 0], [0, 1], [0, 2],
-  [1, 0], [1, -1], [1, -2], [1, 1],
-  [-1, 1], [-1, 0], [-1, -1], [-1, 2],
-  [-2, 1], [-2, 0], [-2, -1], [-2, 2], [-2, 3],
-  [2, 0], [2, -1], [2, -2], [2, -3], [2, 1]
+var schema = [
+  {position: [-2, -1]},
+  {position: [-2, 0]},
+  {position: [-2, 1]},
+  {position: [-2, 2]},
+  {position: [-2, 3]},
+  {position: [-1, -1]},
+  {position: [-1, 0]},
+  {position: [-1, 1]},
+  {position: [-1, 2]},
+  {position: [0, -2]},
+  {position: [0, -1]},
+  {position: [0, 0]},
+  {position: [0, 1]},
+  {position: [0, 2]},
+  {position: [1, -2]},
+  {position: [1, -1]},
+  {position: [1, 0]},
+  {position: [1, 1]},
+  {position: [2, -3]},
+  {position: [2, -2]},
+  {position: [2, -1]},
+  {position: [2, 0]},
+  {position: [2, 1]}
 ]
-
-world.tiles = init.map(function (p) {
-  return tile({
-    position: p, 
-    scale: 50,
-    thickness: 0.75
-  })
-})
+var opts = {thickness: 0.75}
+var world = new World(schema, opts)
 
 keyboard.on('keydown', function(key) {
   if (key === '<up>') {
@@ -242,6 +253,10 @@ keyboard.on('keydown', function(key) {
   }
   drawEditor()
 })
+
+function rebuildWorld() {
+  world = new World(schema, opts)
+}
 
 function drawEditor() {
   var context = editor.getContext('2d')
