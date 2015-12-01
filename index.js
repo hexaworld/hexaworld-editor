@@ -95,6 +95,9 @@ _.forEach(_.range(icons.landmark.length), function(i) {
   drawIcon(i, 'landmark')
 })
 
+_.forEach(_.range(icons.blank.length), function(i) {
+  makeIcon(i, 'blank')
+  drawIcon(i, 'blank')
 })
 
 function getPosition(event) {
@@ -181,7 +184,7 @@ interact('.icon').draggable({
         rebuildWorld()
       }
 
-      if (target.className.split(' ')[0] == 'landmarks-icon') {
+      if (target.className.split(' ')[0] === 'blank-icon') {
         if (location > -1) {
           schema[location].cue = []
         }
