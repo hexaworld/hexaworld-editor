@@ -234,6 +234,12 @@ keyboard.on('keydown', function(key) {
   if (key === '<right>') {
     camera.transform.position[0] += 50
   }
+  if (key === ',') {
+    camera.transform.scale += 0.1
+  }
+  if (key === '.') {
+    camera.transform.scale -= 0.1
+  }
   drawEditor()
 })
 
