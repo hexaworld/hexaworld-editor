@@ -3,6 +3,7 @@ var interact = require('interact.js')
 var transform = require('hexaworld/transform.js')
 var tile = require('hexaworld/geo/tile.js')
 var circle = require('hexaworld/geo/circle.js')
+var base = require('./base.js')
 var Keyboard = require('crtrdg-keyboard')
 var Mask = require('hexaworld/mask.js')
 var World = require('hexaworld/world.js')
@@ -30,7 +31,7 @@ module.exports = function(canvas, opts) {
   ]
 
   var groups = [2, 5, 9]
-  var size = 100
+  var size = 95
 
   var icons = {
 
@@ -205,31 +206,7 @@ module.exports = function(canvas, opts) {
   })
   camera.game = {width: editor.width, height: editor.height}
 
-  var schema = [
-    {position: [-2, -1]},
-    {position: [-2, 0]},
-    {position: [-2, 1]},
-    {position: [-2, 2]},
-    {position: [-2, 3]},
-    {position: [-1, -1]},
-    {position: [-1, 0]},
-    {position: [-1, 1]},
-    {position: [-1, 2]},
-    {position: [0, -2]},
-    {position: [0, -1]},
-    {position: [0, 0]},
-    {position: [0, 1]},
-    {position: [0, 2]},
-    {position: [1, -2]},
-    {position: [1, -1]},
-    {position: [1, 0]},
-    {position: [1, 1]},
-    {position: [2, -3]},
-    {position: [2, -2]},
-    {position: [2, -1]},
-    {position: [2, 0]},
-    {position: [2, 1]}
-  ]
+  var schema = base()
 
   var opts = {thickness: 0.75}
   var world = new World(schema, opts)
@@ -273,12 +250,24 @@ module.exports = function(canvas, opts) {
   drawEditor()
 
   return {
-    schema: schema,
+    schema: function() {
+      return schema
+    },
     pause: function() {
       paused = true
     },
     resume: function() {
       paused = false
+    },
+    reload: function(updated) {
+      schema = updated
+      rebuildWorld()
+      drawEditor()
+    },
+    reset: function() {
+      schema = base()
+      rebuildWorld()
+      drawEditor()
     }
   }
 }

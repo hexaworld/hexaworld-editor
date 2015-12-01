@@ -11,11 +11,12 @@
 	<canvas id='game' style='display: none'></canvas>
 	<div class='button button-edit' id='button-edit'>edit</div>
 	<div class='button button-play' id='button-play'>play</div>
+	<div class='button button-reset' id='button-reset'>reset</div>
 </div>
 
 <div id='sidebar'>
 	<div id='sidebar-inner'>
-		<h1>hexaworld editor</h1>
+		<h1> hexaworld maker</h1>
 
 		<div id='tile'>
 			<h2>TILES (click to rotate)</h2>
@@ -26,6 +27,13 @@
 			<span id='blank'></span>
 		</div>
 
+		<div>
+			<span class='button button-save' id='button-save'>save</span>
+			<a id='button-save-download'></a>
+			<input type='file' name='button-load' id='button-load' style='display: none'></input>
+			<label for='button-load' class='button button-load'>load</label>
+
+		</div>
 	</div>
 </div>
 
