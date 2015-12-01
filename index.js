@@ -7,44 +7,49 @@ var height = editorContainer.clientHeight
 
 var edit = editor('editor', {width: width, height: height})
 
-var game = hexaworld('game', edit.schema, {width: width * 0.75, height: height * 0.75})
+var game = hexaworld('game', edit.schema(), {width: width * 0.75, height: height * 0.75})
 game.pause()
 
-document.getElementById('button-edit').addEventListener('click', function (event) {
+document.getElementById('button-edit').onclick = function (event) {
   document.getElementById('editor').style.display = 'initial'
   document.getElementById('game').style.display = 'none'
   game.pause()
   edit.resume()
-})
+}
 
-document.getElementById('button-play').addEventListener('click', function (event) {
+document.getElementById('button-play').onclick = function (event) {
   document.getElementById('editor').style.display = 'none'
   document.getElementById('game').style.display = 'initial' 
   game.reload(edit.schema())
   game.resume()
   edit.pause()
-})
+}
 
-document.getElementById('button-reset').addEventListener('click', function (event) {
+document.getElementById('button-reset').onclick = function (event) {
   document.getElementById('editor').style.display = 'initial'
   document.getElementById('game').style.display = 'none'
   game.pause()
   edit.reset()
   edit.resume()
-})
+}
 
-document.getElementById('button-save').addEventListener('click', function (event) {
+document.getElementById('button-save').onclick = function (event) {
   var payload = encodeURIComponent(JSON.stringify(edit.schema()))
   var el = document.getElementById('button-save-download')
   el.setAttribute('download', 'world.json')
   el.setAttribute('href', 'data:application/text,' + payload)
   el.click()
-})
+}
 
-document.getElementById('button-load').addEventListener('change', function (event) {
+document.getElementById('button-load-label').onclick = function (event) {
+  document.getElementById('button-load').value = null
+}
+
+document.getElementById('button-load').onchange = function (event) {
   var reader = new FileReader()
   reader.onload = function (event) {
-    edit.reload(JSON.parse(event.target.result))
+    var schema = JSON.parse(event.target.result)
+    edit.reload(schema)
   }
   reader.readAsText(this.files[0])
-})
+}
