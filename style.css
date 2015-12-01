@@ -17,6 +17,9 @@ h1 {
 }
 
 #editor-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 55%;
   height: 100%;
   left: 0;
@@ -25,7 +28,6 @@ h1 {
 }
 
 #game {
-  position: relative;
   background: rgb(100,100,100);
 }
 
@@ -46,5 +48,33 @@ h1 {
 
 .icon {
   margin-right: 15px;
+}
+
+.button {
+  background-color: rgb(80,80,80);
+  opacity: 0.8;
+  font-size: 18px;
+  position: absolute;
+  bottom: 40px;
+  border-radius: 10px;
+  border: solid 3px rgb(220,220,220);
+  padding: 10px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: rgb(120,120,120);
+}
+
+.button:active {
+  background-color: rgb(100,100,100);
+}
+
+.button-edit {
+  left: 50px;
+}
+
+.button-play {
+  left: 125px;
 }
 
