@@ -1,13 +1,13 @@
 var _ = require('lodash')
 var interact = require('interact.js')
 var transform = require('transformist')
-var tile = require('hexaworld/geo/tile.js')
-var circle = require('hexaworld/geo/circle.js')
 var base = require('./base.js')
+var tile = require('hexaworld/geometry/tile.js')
+var circle = require('hexaworld/geometry/circle.js')
+var Mask = require('hexaworld/util/mask.js')
+var World = require('hexaworld/entity/world.js')
+var Camera = require('hexaworld/entity/camera.js')
 var Keyboard = require('crtrdg-keyboard')
-var Mask = require('hexaworld/mask.js')
-var World = require('hexaworld/world.js')
-var Camera = require('hexaworld/camera.js')
 
 module.exports = function(canvas, opts) {
   var editor = document.getElementById(canvas)
