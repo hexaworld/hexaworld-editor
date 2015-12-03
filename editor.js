@@ -15,12 +15,10 @@ module.exports = function(canvas, opts) {
   editor.setAttribute('height', opts.height + 'px')
 
   var paths = [
-    [], 
-    [3], 
-    [0,1,2,3,4,5],
-    [3,4], [3,5], [3,0],
+    [], [3], [3,0], [3,5], [3,4],
     [1,3,5], [3,4,5], [3,4,0], [3,4,1],
-    [0,1,2,3], [0,1,2,4], [0,1,3,4], [0,1,2,3,4]
+    [0,1,2,3], [0,1,2,4], [0,1,3,4],
+    [0,1,2,3,4], [0,1,2,3,4,5],
   ]
 
   var cues = [
@@ -30,8 +28,8 @@ module.exports = function(canvas, opts) {
     '#64FF00'
   ]
 
-  var groups = [2, 5, 9]
-  var size = 95
+  var groups = [4, 8]
+  var size = 85
 
   var icons = {
 
@@ -49,11 +47,11 @@ module.exports = function(canvas, opts) {
         fill: c,
         stroke: 'white', 
         thickness: 3, 
-        scale: 15
+        scale: size/8
       })
     }),
 
-    blank: [circle({fill: 'rgb(90,90,90)'})]
+    blank: [circle({fill: 'rgb(90,90,90)', stroke: 'rgb(90,90,90)'})],
 
   }
 
