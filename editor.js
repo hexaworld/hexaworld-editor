@@ -1,13 +1,13 @@
 var _ = require('lodash')
 var interact = require('interact.js')
 var transform = require('transformist')
-var tile = require('hexaworld/geo/tile.js')
-var circle = require('hexaworld/geo/circle.js')
 var base = require('./base.js')
+var tile = require('hexaworld/geometry/tile.js')
+var circle = require('hexaworld/geometry/circle.js')
+var Mask = require('hexaworld/util/mask.js')
+var World = require('hexaworld/entity/world.js')
+var Camera = require('hexaworld/entity/camera.js')
 var Keyboard = require('crtrdg-keyboard')
-var Mask = require('hexaworld/mask.js')
-var World = require('hexaworld/world.js')
-var Camera = require('hexaworld/camera.js')
 
 module.exports = function(canvas, opts) {
   var editor = document.getElementById(canvas)
@@ -35,7 +35,7 @@ module.exports = function(canvas, opts) {
 
     tile: paths.map( function (p) {
       return tile({
-        position: [0, 0],
+        translation: [0, 0],
         scale: size / 2,
         paths: p,
         thickness: 1
@@ -116,7 +116,7 @@ module.exports = function(canvas, opts) {
         var id = parseInt(icon.id.split('-')[1])
         paths[id] = _.map(paths[id], function(i) {return ((i + d) % 6) < 0 ? 5 : ((i + d) % 6) })
         icons.tile[id] = tile({
-          position: [0, 0], 
+          translation: [0, 0], 
           scale: size/2, 
           paths: paths[id],
           thickness: 1
@@ -160,7 +160,7 @@ module.exports = function(canvas, opts) {
         var q = Math.round(position[0] * 2/3 / 50)
         var r = Math.round((-position[0] / 3 + Math.sqrt(3)/3 * position[1]) / 50)
         var location = _.findIndex(schema, function(item) {
-          return item.position[0] === q && item.position[1] === r 
+          return item.translation[0] === q && item.translation[1] === r 
         })
 
         if (target.className.split(' ')[0] == 'tile-icon') {    
@@ -168,7 +168,7 @@ module.exports = function(canvas, opts) {
           if (location > -1) {
             schema[location].paths = paths[id]
           } else {
-            schema.push({position: [q, r], paths: paths[id]})
+            schema.push({translation: [q, r], paths: paths[id]})
           }
           rebuildWorld()
         }
