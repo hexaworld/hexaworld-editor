@@ -1,6 +1,6 @@
 var _ = require('lodash')
 var interact = require('interact.js')
-var transform = require('hexaworld/transform.js')
+var transform = require('transformist')
 var tile = require('hexaworld/geo/tile.js')
 var circle = require('hexaworld/geo/circle.js')
 var base = require('./base.js')
@@ -59,7 +59,7 @@ module.exports = function(canvas, opts) {
 
   var mask = new Mask({
     size: 0.95 * size/2,
-    position: [size/2, size/2],
+    translation: [size/2, size/2],
     fill: 'rgb(90,90,90)',
     orientation: 'flat'
   })
@@ -201,7 +201,7 @@ module.exports = function(canvas, opts) {
   var keyboard = new Keyboard()
   var camera = new Camera({
     scale: 0.7,
-    speed: {position: .5, angle: .1, scale: .002},
+    speed: {translation: .5, rotation: .1, scale: .002},
     friction: 1,
   })
   camera.game = {width: editor.width, height: editor.height}
@@ -216,16 +216,16 @@ module.exports = function(canvas, opts) {
   keyboard.on('keydown', function(key) {
     if (!paused) {
       if (key === '<up>') {
-        camera.transform.position[1] -= 50
+        camera.transform.translation[1] -= 50
       }
       if (key === '<down>') {
-        camera.transform.position[1] += 50
+        camera.transform.translation[1] += 50
       }
       if (key === '<left>') {
-        camera.transform.position[0] -= 50
+        camera.transform.translation[0] -= 50
       }
       if (key === '<right>') {
-        camera.transform.position[0] += 50
+        camera.transform.translation[0] += 50
       }
       if (key === ',') {
         camera.transform.scale += 0.1

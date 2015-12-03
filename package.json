@@ -33,7 +33,8 @@
     "crtrdg-gameloop": "^0.2.2",
     "crtrdg-keyboard": "0.0.2",
     "interact.js": "^1.2.6",
-    "lodash": "^3.10.1"
+    "lodash": "^3.10.1",
+    "transformist": "^1.0.0"
   },
   "devDependencies": {
     "browserify": "^12.0.1",
