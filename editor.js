@@ -4,6 +4,7 @@ var transform = require('transformist')
 var base = require('./base.js')
 var tile = require('hexaworld/geometry/tile.js')
 var circle = require('hexaworld/geometry/circle.js')
+var mouse = require('hexaworld/geometry/mouse.js')
 var Mask = require('hexaworld/util/mask.js')
 var World = require('hexaworld/entity/world.js')
 var Camera = require('hexaworld/entity/camera.js')
@@ -53,6 +54,8 @@ module.exports = function(canvas, opts) {
 
     blank: [circle({fill: 'rgb(90,90,90)', stroke: 'rgb(90,90,90)'})],
 
+    player: [mouse({fill: 'rgb(75,75,75)', stroke: 'white', thickness: 3, scale: size/8})]
+
   }
 
   var mask = new Mask({
@@ -75,7 +78,7 @@ module.exports = function(canvas, opts) {
     var context = document.getElementById(label + '-' + i).getContext('2d')
     var camera = {transform: transform(), game: {width: size, height: size}}
     mask.set(context)
-    icons[label][i].draw(context, camera)
+    icons[label][i].draw(context, camera, {order: 'bottom'})
     mask.unset(context)
   }
 
@@ -95,6 +98,11 @@ module.exports = function(canvas, opts) {
   _.forEach(_.range(icons.blank.length), function(i) {
     makeIcon(i, 'blank')
     drawIcon(i, 'blank')
+  })
+
+  _.forEach(_.range(icons.player.length), function(i) {
+    makeIcon(i, 'player')
+    drawIcon(i, 'player')
   })
 
   function getPosition(event) {
