@@ -167,16 +167,16 @@ module.exports = function(canvas, opts) {
       if (position) {
         var q = Math.round(position[0] * 2/3 / 50)
         var r = Math.round((-position[0] / 3 + Math.sqrt(3)/3 * position[1]) / 50)
-        var location = _.findIndex(schema, function(item) {
+        var location = _.findIndex(schema.tiles, function(item) {
           return item.translation[0] === q && item.translation[1] === r 
         })
 
         if (target.className.split(' ')[0] == 'tile-icon') {    
           var id = parseInt(target.id.split('-')[1])
           if (location > -1) {
-            schema[location].paths = paths[id]
+            schema.tiles[location].paths = paths[id]
           } else {
-            schema.push({translation: [q, r], paths: paths[id]})
+            schema.tiles.push({translation: [q, r], paths: paths[id]})
           }
           rebuildWorld()
         }
@@ -184,14 +184,14 @@ module.exports = function(canvas, opts) {
         if (target.className.split(' ')[0] == 'landmark-icon') {
           var id = parseInt(target.id.split('-')[1])
           if (location > -1) {
-            schema[location].cue = cues[id]
+            schema.tiles[location].cue = cues[id]
           }
           rebuildWorld()
         }
 
         if (target.className.split(' ')[0] === 'blank-icon') {
           if (location > -1) {
-            schema[location].cue = []
+            schema.tiles[location].cue = []
           }
           rebuildWorld()
         }
@@ -215,7 +215,8 @@ module.exports = function(canvas, opts) {
   var schema = base()
 
   var opts = {thickness: 0.75}
-  var world = new World(schema, opts)
+
+  var world = new World(schema.tiles, opts)
 
   var paused = false
 
@@ -244,7 +245,7 @@ module.exports = function(canvas, opts) {
   })
 
   function rebuildWorld() {
-    world = new World(schema, opts)
+    world = new World(schema.tiles, opts)
   }
 
   function drawEditor() {
