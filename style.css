@@ -9,11 +9,11 @@ body {
 }
 
 hr {
-  border: dotted 2px rgb(220,220,220);
+  border: dotted 1px rgb(220,220,220);
 }
 
 h1 {
-  font-size: 42px;
+  font-size: 40px;
   margin-bottom: 40px;
 }
 
@@ -48,7 +48,7 @@ input {
   position: absolute;
   right: 0;
   top: 0;
-  border-left: dotted 5px rgb(220,220,220);
+  border-left: dotted 4px rgb(220,220,220);
   background: rgb(130,130,130);
 }
 
@@ -64,10 +64,10 @@ input {
 .button {
   background-color: rgb(80,80,80);
   opacity: 0.8;
-  font-size: 16px;
+  font-size: 14px;
   border-radius: 10px;
-  border: solid 3px rgb(220,220,220);
-  padding: 10px;
+  border: solid 2px rgb(220,220,220);
+  padding: 9px;
   cursor: pointer;
 }
 
@@ -86,7 +86,7 @@ input {
 }
 
 .button-play {
-  left: 125px;
+  left: 117px;
   top: 35px;
   position: absolute;
 }
@@ -98,13 +98,13 @@ input {
 }
 
 .button-save {
-  right: 125px;
+  right: 115px;
   top: 35px;
   position: absolute;
 }
 
 .button-reset {
-  left: 200px;
+  left: 185px;
   top: 35px;
   position: absolute;
 }

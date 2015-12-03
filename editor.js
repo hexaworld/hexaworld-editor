@@ -198,7 +198,7 @@ module.exports = function(canvas, opts) {
 
   var keyboard = new Keyboard()
   var camera = new Camera({
-    scale: 0.7,
+    scale: 0.8,
     speed: {translation: .5, rotation: .1, scale: .002},
     friction: 1,
   })
