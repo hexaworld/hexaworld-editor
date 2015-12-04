@@ -60,7 +60,7 @@ module.exports = function(canvas, opts) {
 
     blank: [circle({fill: 'rgb(90,90,90)', stroke: 'rgb(90,90,90)'})],
 
-    player: [mouse({fill: 'rgb(75,75,75)', stroke: 'white', thickness: 3, scale: size/9})],
+    player: [mouse({fill: 'rgb(75,75,75)', stroke: 'white', thickness: 3, scale: size/8})],
 
     goal: targets.map( function (c) {
       return hex({
@@ -259,7 +259,7 @@ module.exports = function(canvas, opts) {
   var opts = {thickness: 0.75}
 
   var player = new Player(schema.players[0], {
-    scale: 2,
+    scale: 3,
     speed: {translation: 1, rotation: 8},
     friction: 0.9,
     stroke: 'white',
