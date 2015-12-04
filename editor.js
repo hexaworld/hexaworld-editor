@@ -7,6 +7,7 @@ var circle = require('hexaworld/geometry/circle.js')
 var mouse = require('hexaworld/geometry/mouse.js')
 var Mask = require('hexaworld/util/mask.js')
 var World = require('hexaworld/entity/world.js')
+var Player = require('hexaworld/entity/player.js')
 var Camera = require('hexaworld/entity/camera.js')
 var Keyboard = require('crtrdg-keyboard')
 
@@ -196,6 +197,13 @@ module.exports = function(canvas, opts) {
           rebuildGame()
         }
       
+        if (target.className.split(' ')[0] === 'player-icon') {
+          if (location > -1) {
+            schema.players[0].translation = [q, r]
+          }
+          rebuildGame()
+        }
+
       }
       target.style.webkitTransform = target.style.transform = 'translate(0px, 0px)'
       target.setAttribute('data-x', 0)
@@ -217,6 +225,17 @@ module.exports = function(canvas, opts) {
   var opts = {thickness: 0.75}
 
   var world = new World(schema.tiles, opts)
+
+  var opts = {thickness: 0.75}
+
+  var player = new Player(schema.players[0], {
+    scale: 2,
+    speed: {translation: 1, rotation: 8},
+    friction: 0.9,
+    stroke: 'white',
+    fill: 'rgb(75,75,75)',
+    thickness: 0.5
+  })
 
   var paused = false
 
@@ -246,12 +265,14 @@ module.exports = function(canvas, opts) {
 
   function rebuildGame() {
     world.load(schema.tiles)
+    player.load(schema.players[0])
   }
 
   function drawEditor() {
     var context = editor.getContext('2d')
     context.clearRect(0, 0, editor.width, editor.height)
     world.draw(context, camera)
+    player.draw(context, camera)
   }
 
   drawEditor()
