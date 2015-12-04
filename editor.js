@@ -178,7 +178,7 @@ module.exports = function(canvas, opts) {
           } else {
             schema.tiles.push({translation: [q, r], paths: paths[id]})
           }
-          rebuildWorld()
+          rebuildGame()
         }
 
         if (target.className.split(' ')[0] == 'landmark-icon') {
@@ -186,14 +186,14 @@ module.exports = function(canvas, opts) {
           if (location > -1) {
             schema.tiles[location].cue = cues[id]
           }
-          rebuildWorld()
+          rebuildGame()
         }
 
         if (target.className.split(' ')[0] === 'blank-icon') {
           if (location > -1) {
             schema.tiles[location].cue = []
           }
-          rebuildWorld()
+          rebuildGame()
         }
       
       }
@@ -244,8 +244,8 @@ module.exports = function(canvas, opts) {
     }
   })
 
-  function rebuildWorld() {
-    world = new World(schema.tiles, opts)
+  function rebuildGame() {
+    world.load(schema.tiles)
   }
 
   function drawEditor() {
@@ -268,12 +268,12 @@ module.exports = function(canvas, opts) {
     },
     reload: function(updated) {
       schema = updated
-      rebuildWorld()
+      rebuildGame()
       drawEditor()
     },
     reset: function() {
       schema = base()
-      rebuildWorld()
+      rebuildGame()
       drawEditor()
     }
   }
