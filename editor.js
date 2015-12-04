@@ -184,14 +184,14 @@ module.exports = function(canvas, opts) {
         if (target.className.split(' ')[0] == 'landmark-icon') {
           var id = parseInt(target.id.split('-')[1])
           if (location > -1) {
-            schema.tiles[location].cue = cues[id]
+            schema.tiles[location].cue = {fill: cues[id]}
           }
           rebuildGame()
         }
 
         if (target.className.split(' ')[0] === 'blank-icon') {
           if (location > -1) {
-            schema.tiles[location].cue = []
+            delete schema.tiles[location].cue
           }
           rebuildGame()
         }
