@@ -4,6 +4,7 @@ var transform = require('transformist')
 var base = require('./base.js')
 var tile = require('hexaworld/geometry/tile.js')
 var circle = require('hexaworld/geometry/circle.js')
+var hex = require('hexaworld/geometry/hex.js')
 var mouse = require('hexaworld/geometry/mouse.js')
 var Mask = require('hexaworld/util/mask.js')
 var World = require('hexaworld/entity/world.js')
@@ -28,6 +29,10 @@ module.exports = function(canvas, opts) {
     '#FF8900', 
     '#00C3EE', 
     '#64FF00'
+  ]
+
+  var targets = [
+    '#8B8D90', 
   ]
 
   var groups = [4, 8]
@@ -55,7 +60,16 @@ module.exports = function(canvas, opts) {
 
     blank: [circle({fill: 'rgb(90,90,90)', stroke: 'rgb(90,90,90)'})],
 
-    player: [mouse({fill: 'rgb(75,75,75)', stroke: 'white', thickness: 3, scale: size/8})]
+    player: [mouse({fill: 'rgb(75,75,75)', stroke: 'white', thickness: 3, scale: size/9})],
+
+    goal: targets.map( function (c) {
+      return hex({
+        fill: c,
+        stroke: 'white', 
+        thickness: 3, 
+        scale: size/8
+      })
+    }),
 
   }
 
@@ -66,13 +80,13 @@ module.exports = function(canvas, opts) {
     orientation: 'flat'
   })
 
-  function makeIcon(i, label) {
+  function makeIcon(i, label, group) {
     var canvas = document.createElement('canvas')
     canvas.setAttribute('width', size + 'px')
     canvas.setAttribute('height', size + 'px')
     canvas.id = label + '-' + i
     canvas.className = label + '-icon icon'
-    document.getElementById(label).appendChild(canvas)
+    document.getElementById(group).appendChild(canvas)
   }
 
   function drawIcon(i, label) {
@@ -84,7 +98,7 @@ module.exports = function(canvas, opts) {
   }
 
   _.forEach(_.range(icons.tile.length), function(i) {
-    makeIcon(i, 'tile')
+    makeIcon(i, 'tile', 'tile')
     drawIcon(i, 'tile')
     if (groups.indexOf(i) > -1) {
       document.getElementById('tile').appendChild(document.createElement('hr'))
@@ -92,18 +106,25 @@ module.exports = function(canvas, opts) {
   })
 
   _.forEach(_.range(icons.landmark.length), function(i) {
-    makeIcon(i, 'landmark')
+    makeIcon(i, 'landmark', 'item')
     drawIcon(i, 'landmark')
   })
 
+  document.getElementById('item').appendChild(document.createElement('hr'))
+
   _.forEach(_.range(icons.blank.length), function(i) {
-    makeIcon(i, 'blank')
+    makeIcon(i, 'blank', 'item')
     drawIcon(i, 'blank')
   })
 
   _.forEach(_.range(icons.player.length), function(i) {
-    makeIcon(i, 'player')
+    makeIcon(i, 'player', 'item')
     drawIcon(i, 'player')
+  })
+
+  _.forEach(_.range(icons.goal.length), function(i) {
+     makeIcon(i, 'goal', 'item')
+     drawIcon(i, 'goal')
   })
 
   function getPosition(event) {
@@ -193,6 +214,7 @@ module.exports = function(canvas, opts) {
         if (target.className.split(' ')[0] === 'blank-icon') {
           if (location > -1) {
             schema.tiles[location].cue = []
+            schema.tiles[location].target = []
           }
           rebuildGame()
         }
@@ -200,6 +222,14 @@ module.exports = function(canvas, opts) {
         if (target.className.split(' ')[0] === 'player-icon') {
           if (location > -1) {
             schema.players[0].translation = [q, r]
+          }
+          rebuildGame()
+        }
+
+        if (target.className.split(' ')[0] == 'goal-icon') {
+          var id = parseInt(target.id.split('-')[1])
+          if (location > -1) {
+            schema.tiles[location].target = targets[id]
           }
           rebuildGame()
         }
