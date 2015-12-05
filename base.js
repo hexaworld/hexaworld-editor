@@ -27,6 +27,7 @@ module.exports = function() {
     ],
     players: [
         {translation: [0, 0], character: 'mouse'}
-    ]
+    ],
+    gameplay: {timeout: 60}
   } 
 }
