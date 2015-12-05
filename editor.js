@@ -50,9 +50,9 @@ module.exports = function(canvas, opts) {
     }),
 
     landmark: cues.map( function (c) {
-      return circle({
+      return hex({
         fill: c,
-        stroke: 'white', 
+        stroke: c, 
         thickness: 3, 
         scale: size/8
       })
@@ -63,7 +63,7 @@ module.exports = function(canvas, opts) {
     player: [mouse({fill: 'rgb(75,75,75)', stroke: 'white', thickness: 3, scale: size/9})],
 
     goal: targets.map( function (c) {
-      return hex({
+      return circle({
         fill: c,
         stroke: 'white', 
         thickness: 3, 
