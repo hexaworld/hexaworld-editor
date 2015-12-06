@@ -1,0 +1,44 @@
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>hexaworld editor</title>
+  <link rel='stylesheet' href='style.css'>
+</head>
+<body>
+
+<div id='editor-container'>
+	<canvas id='editor'></canvas>
+	<div class='button button-edit' id='button-edit'>edit</div>
+	<div class='button button-play' id='button-play'>play</div>
+	<div class='button button-reset' id='button-reset'>reset</div>
+</div>
+
+<div id='wrapper'>
+	<div id='game-container'></div>
+</div>
+
+<div id='sidebar'>
+	<div id='sidebar-inner'>
+		<h1> hexaworld maker</h1>
+
+		<div id='tile'>
+			<h2>TILES (click to rotate)</h2>
+		</div>
+
+		<div id='item'>
+			<h2>ITEMS</h2>
+		</div>
+
+		<div>
+			<span class='button button-save' id='button-save'>save</span>
+			<a id='button-save-download'></a>
+			<input type='file' name='button-load' id='button-load' style='display: none'></input>
+			<label for='button-load' class='button button-load' id='button-load-label'>load</label>
+		</div>
+
+	</div>
+</div>
+
+<script src='./bundle.js'></script>
+</body>
+</html>

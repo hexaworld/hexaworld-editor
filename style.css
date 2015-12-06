@@ -1,0 +1,117 @@
+html,
+body {
+  font: 16px/1.2 "Hack", Helvetica, arial, sans-serif;
+  color: rgb(220,220,220);
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  font-weight: 300;
+  background: rgb(100,100,100);
+}
+
+hr {
+  border: dotted 1px rgb(220,220,220);
+}
+
+h1 {
+  font-size: 40px;
+  margin-bottom: 40px;
+}
+
+input {
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
+}
+
+#editor-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 55%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  position: absolute;
+}
+
+#wrapper {
+  width: 55%;
+  margin-top: 5%;
+}
+
+#game-container {
+  height: 90%;
+  margin: 0 auto;
+}
+
+#sidebar {
+  width: 45%;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-left: dotted 4px rgb(220,220,220);
+  background: rgb(130,130,130);
+}
+
+#sidebar-inner {
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+.icon {
+  margin-right: 15px;
+}
+
+.button {
+  background-color: rgb(80,80,80);
+  opacity: 0.8;
+  font-size: 14px;
+  border-radius: 10px;
+  border: solid 2px rgb(220,220,220);
+  padding: 9px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.button:hover {
+  background-color: rgb(120,120,120);
+}
+
+.button:active {
+  background-color: rgb(100,100,100);
+}
+
+.button-edit {
+  left: 50px;
+  top: 35px;
+  position: absolute;
+}
+
+.button-play {
+  left: 117px;
+  top: 35px;
+  position: absolute;
+}
+
+.button-load {
+  right: 50px;
+  top: 35px;
+  position: absolute;
+}
+
+.button-save {
+  right: 115px;
+  top: 35px;
+  position: absolute;
+}
+
+.button-reset {
+  left: 185px;
+  top: 35px;
+  position: absolute;
+}
