@@ -38,10 +38,14 @@ input {
   position: absolute;
 }
 
+#wrapper {
+  width: 55%;
+  margin-top: 5%;
+}
+
 #game-container {
   height: 90%;
-  top: 10%;
-  left: 10%;
+  margin: 0 auto;
 }
 
 #sidebar {

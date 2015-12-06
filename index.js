@@ -20,7 +20,7 @@ document.getElementById('button-edit').onclick = function (event) {
 
 document.getElementById('button-play').onclick = function (event) {
   document.getElementById('editor').style.display = 'none'
-  document.getElementById('game-container').style.display = 'initial' 
+  document.getElementById('game-container').style.display = 'block' 
   game.reload(edit.schema())
   game.resume()
   edit.pause()
