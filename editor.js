@@ -251,7 +251,31 @@ module.exports = function(canvas, opts) {
   camera.game = {width: editor.width, height: editor.height}
 
   var schema = base()
+  var gameplay = document.getElementById('gameplay')
+    Object.keys(schema.gameplay).forEach(function (key) {
+      var fieldset = document.createElement('fieldset')
 
+      var label = document.createElement('label')
+      label.for = 'gameplay-' + key
+      label.innerHTML = key
+
+      var input = document.createElement('input')
+      input.type = 'text'
+      input.class = 'gameplay-config'
+      input.name = 'gameplay-' + key
+      input.id = 'gameplay-config-' + key
+      input.value = schema.gameplay[key]
+
+      fieldset.appendChild(label)
+      fieldset.appendChild(input)
+      gameplay.appendChild(fieldset)
+
+      input.addEventListener('input', function (e) {
+        var value = e.target.value
+        schema.gameplay[key] = Number(value)
+        console.log(schema.gameplay)
+      })
+    })
   var opts = {thickness: 0.75}
 
   var world = new World(schema.tiles, opts)
