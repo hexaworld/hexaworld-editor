@@ -36,7 +36,7 @@ module.exports = function(canvas, opts) {
   ]
 
   var groups = [4, 8]
-  var size = opts.width / 10
+  var size = opts.width / 12
 
   var icons = {
 
@@ -268,6 +268,34 @@ module.exports = function(canvas, opts) {
   camera.game = {width: editor.width, height: editor.height}
 
   var schema = base()
+  var gameplay = document.getElementById('gameplay')
+  Object.keys(schema.gameplay).forEach(function (key) {
+    createConfigField(key)
+  })
+
+  function createConfigField (key) {
+    var fieldset = document.createElement('fieldset')
+
+    var label = document.createElement('label')
+    label.setAttribute('for', 'gameplay-' + key)
+    label.innerHTML = key
+
+    var input = document.createElement('input')
+    input.type = 'text'
+    input.className = 'gameplay-config'
+    input.name = 'gameplay-' + key
+    input.id = 'gameplay-config-' + key
+    input.value = schema.gameplay[key]
+
+    fieldset.appendChild(label)
+    fieldset.appendChild(input)
+    gameplay.appendChild(fieldset)
+
+    input.addEventListener('input', function (e) {
+      var value = e.target.value
+      schema.gameplay[key] = Number(value)
+    })
+  }
 
   var opts = {thickness: 0.75}
 
@@ -322,6 +350,17 @@ module.exports = function(canvas, opts) {
     player.draw(context, camera)
   }
 
+  function updateConfig (schema) {
+    Object.keys(schema.gameplay).forEach(function (key) {
+      var config = document.getElementById('gameplay-config-' + key)
+      if (config) {
+        config.value = schema.gameplay[key]
+      } else {
+        createConfigField(key)
+      }
+    })
+  }
+
   drawEditor()
 
   return {
@@ -338,11 +377,13 @@ module.exports = function(canvas, opts) {
       schema = updated
       rebuildGame()
       drawEditor()
+      updateConfig(schema)
     },
     reset: function() {
       schema = base()
       rebuildGame()
       drawEditor()
+      updateConfig(base())
     }
   }
 }
