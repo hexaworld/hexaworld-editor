@@ -1,3 +1,4 @@
+
 var hexaworld = require('hexaworld/game.js')
 var editor = require('./editor.js')
 
@@ -38,10 +39,8 @@ document.getElementById('button-reset').onclick = function (event) {
 
 document.getElementById('button-save').onclick = function (event) {
   var payload = encodeURIComponent(JSON.stringify(edit.schema()))
-  var el = document.getElementById('button-save-download')
-  el.setAttribute('download', 'world.json')
-  el.setAttribute('href', 'data:application/text,' + payload)
-  el.click()
+  var save = require('./ui/save-world')(payload)
+  save.show()
 }
 
 document.getElementById('button-load-label').onclick = function (event) {

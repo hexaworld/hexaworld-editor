@@ -115,3 +115,58 @@ input {
   top: 35px;
   position: absolute;
 }
+
+/*
+* popup styles */
+
+.popupjs-background {
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+}
+
+.popupjs-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border: 1px solid #efefea;
+  padding: 10px;
+  background-color: rgb(100, 100, 100);
+}
+
+.popupjs-close {
+  border: 0px;
+  color: #fff;
+  position: relative;
+  display: block;
+  float: right;
+  cursor: pointer;
+  font-size: 25px;
+  background-color: rgb(100, 100, 100);
+}
+
+.popupjs-content {
+  clear: both;
+  padding: 20px 50px 10px;
+  text-align: center;
+}
+
+.popupjs-actions {
+  padding: 0px 50px 50px;
+}
+
+.popupjs-content .text-input {
+  border: 1px solid #fff;
+  padding: 5px;
+  color: #fff;
+}
+
+.popupjs-actions button {
+  color: #fff;
+}
+
+.popupjs-content h2 {
+  margin: 0px 0px 10px 0px;
+}
