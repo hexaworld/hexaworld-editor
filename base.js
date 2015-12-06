@@ -28,6 +28,6 @@ module.exports = function() {
     players: [
         {translation: [0, 0], character: 'mouse'}
     ],
-    gameplay: {timeout: 60}
+    gameplay: {steps: 20, sight: 150}
   } 
 }
