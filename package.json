@@ -34,6 +34,7 @@
     "crtrdg-keyboard": "0.0.2",
     "interact.js": "^1.2.6",
     "lodash": "^3.10.1",
+    "popupjs": "^1.3.0",
     "transformist": "^1.0.0"
   },
   "devDependencies": {
