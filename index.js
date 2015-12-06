@@ -14,6 +14,7 @@ document.getElementById('game-container').style.display = 'none'
 document.getElementById('button-edit').onclick = function (event) {
   document.getElementById('editor').style.display = 'initial'
   document.getElementById('game-container').style.display = 'none'
+  editorContainer.style.background = 'rgb(100,100,100)'
   game.pause()
   edit.resume()
 }
@@ -21,6 +22,7 @@ document.getElementById('button-edit').onclick = function (event) {
 document.getElementById('button-play').onclick = function (event) {
   document.getElementById('editor').style.display = 'none'
   document.getElementById('game-container').style.display = 'block' 
+  editorContainer.style.background = 'rgb(55,55,55)'
   game.reload(edit.schema())
   game.resume()
   edit.pause()
