@@ -156,6 +156,22 @@ module.exports = function(canvas, opts) {
     })
   })
 
+  _.forEach(document.getElementsByClassName('player-icon'), function(icon) {
+    icon.addEventListener('click', function (item) {
+      console.log('clicked player')
+      var d
+      if (item.offsetY > 0 && item.offsetY < size) {
+        if (item.offsetX >= size/2 && item.offsetX < size) d = 1
+        if (item.offsetX > 0 && item.offsetX < size/2) d = -1
+      } 
+      if (d) {
+        var id = parseInt(icon.id.split('-')[1])
+        icons.player[id].update({rotation: 60 * d})
+        drawIcon(id, 'player')
+      }
+    })
+  })
+
   interact('.icon').draggable({
 
     onmove: function (event) {
@@ -222,6 +238,7 @@ module.exports = function(canvas, opts) {
         if (target.className.split(' ')[0] === 'player-icon') {
           if (location > -1) {
             schema.players[0].translation = [q, r]
+            schema.players[0].rotation = icons.player[0].transform.rotation
           }
           rebuildGame()
         }

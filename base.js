@@ -26,7 +26,7 @@ module.exports = function() {
         {translation: [2, 1]}
     ],
     players: [
-        {translation: [0, 0], character: 'mouse'}
+        {translation: [0, 0], rotation: 0, character: 'mouse'}
     ],
     gameplay: {steps: 20, sight: 150}
   } 
