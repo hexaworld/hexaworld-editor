@@ -1,4 +1,3 @@
-
 var hexaworld = require('hexaworld/game.js')
 var editor = require('./editor.js')
 
