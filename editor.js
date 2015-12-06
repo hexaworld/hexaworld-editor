@@ -32,7 +32,7 @@ module.exports = function(canvas, opts) {
   ]
 
   var targets = [
-    '#8B8D90', 
+    'white', 
   ]
 
   var groups = [4, 8]
