@@ -1,5 +1,4 @@
 var popup = require('popupjs')
-var _ = require('lodash')
 
 module.exports = function (payload) {
   var save = popup({
