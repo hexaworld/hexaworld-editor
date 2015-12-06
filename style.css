@@ -38,8 +38,10 @@ input {
   position: absolute;
 }
 
-#game {
-  background: rgb(100,100,100);
+#game-container {
+  height: 90%;
+  top: 10%;
+  left: 10%;
 }
 
 #sidebar {
@@ -69,6 +71,7 @@ input {
   border: solid 2px rgb(220,220,220);
   padding: 9px;
   cursor: pointer;
+  z-index: 1000;
 }
 
 .button:hover {

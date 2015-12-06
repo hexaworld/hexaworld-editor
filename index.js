@@ -7,19 +7,20 @@ var height = editorContainer.clientHeight
 
 var edit = editor('editor', {width: width, height: height})
 
-var game = hexaworld('game', edit.schema(), {width: width * 0.75, height: height * 0.75})
+var game = hexaworld('game-container', edit.schema())
 game.pause()
+document.getElementById('game-container').style.display = 'none'
 
 document.getElementById('button-edit').onclick = function (event) {
   document.getElementById('editor').style.display = 'initial'
-  document.getElementById('game').style.display = 'none'
+  document.getElementById('game-container').style.display = 'none'
   game.pause()
   edit.resume()
 }
 
 document.getElementById('button-play').onclick = function (event) {
   document.getElementById('editor').style.display = 'none'
-  document.getElementById('game').style.display = 'initial' 
+  document.getElementById('game-container').style.display = 'initial' 
   game.reload(edit.schema())
   game.resume()
   edit.pause()
@@ -27,7 +28,7 @@ document.getElementById('button-play').onclick = function (event) {
 
 document.getElementById('button-reset').onclick = function (event) {
   document.getElementById('editor').style.display = 'initial'
-  document.getElementById('game').style.display = 'none'
+  document.getElementById('game-container').style.display = 'none'
   game.pause()
   edit.reset()
   edit.resume()
