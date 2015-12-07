@@ -186,7 +186,7 @@ input {
 }
 
 #gameplay input {
-  border: 1px solid #fff;
+  border: 1px dotted #fff;
   width: 100px;
   padding: 4px;
   color: #fff;
