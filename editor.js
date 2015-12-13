@@ -294,8 +294,8 @@ module.exports = function(canvas, opts) {
   })
 
   function rebuildGame() {
-    world.load(schema.tiles)
-    player.load(schema.players[0])
+    world.reload(schema.tiles)
+    player.reload(schema.players[0])
   }
 
   function drawEditor() {
