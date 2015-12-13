@@ -1,7 +1,6 @@
 var _ = require('lodash')
 var interact = require('interact.js')
 var transform = require('transformist')
-var base = require('./base.js')
 var tile = require('hexaworld/geometry/tile.js')
 var circle = require('hexaworld/geometry/circle.js')
 var hex = require('hexaworld/geometry/hex.js')
@@ -12,7 +11,7 @@ var Player = require('hexaworld/entity/player.js')
 var Camera = require('hexaworld/entity/camera.js')
 var Keyboard = require('crtrdg-keyboard')
 
-module.exports = function(canvas, opts) {
+module.exports = function(canvas, schema, opts) {
   var editor = document.getElementById(canvas)
   editor.setAttribute('width', opts.width + 'px')
   editor.setAttribute('height', opts.height + 'px')
@@ -36,7 +35,7 @@ module.exports = function(canvas, opts) {
   ]
 
   var groups = [4, 8]
-  var size = opts.width / 12
+  var size = opts.width / 9
 
   var icons = {
 
@@ -128,7 +127,7 @@ module.exports = function(canvas, opts) {
   })
 
   function getPosition(event) {
-    var x = event.pageX - editor.width/2
+    var x = event.pageX - editor.width/2 - opts.offset
     var y = event.pageY - editor.height/2
     if (_.all([x > -editor.width/2, x < editor.width/2, y > -editor.height/2, y < editor.height/2])) {
       return camera.transform.apply([[x, y]])[0]
@@ -158,7 +157,6 @@ module.exports = function(canvas, opts) {
 
   _.forEach(document.getElementsByClassName('player-icon'), function(icon) {
     icon.addEventListener('click', function (item) {
-      console.log('clicked player')
       var d
       if (item.offsetY > 0 && item.offsetY < size) {
         if (item.offsetX >= size/2 && item.offsetX < size) d = 1
@@ -237,8 +235,10 @@ module.exports = function(canvas, opts) {
       
         if (target.className.split(' ')[0] === 'player-icon') {
           if (location > -1) {
-            schema.players[0].translation = [q, r]
-            schema.players[0].rotation = icons.player[0].transform.rotation
+            schema.gameplay.start = {
+              translation: [q, r],
+              rotation: icons.player[0].transform.rotation
+            }
           }
           rebuildGame()
         }
@@ -247,6 +247,7 @@ module.exports = function(canvas, opts) {
           var id = parseInt(target.id.split('-')[1])
           if (location > -1) {
             schema.tiles[location].target = {fill: targets[id]}
+            schema.gameplay.target = [q, r]
           }
           rebuildGame()
         }
@@ -267,44 +268,15 @@ module.exports = function(canvas, opts) {
   })
   camera.game = {width: editor.width, height: editor.height}
 
-  var schema = base()
   var gameplay = document.getElementById('gameplay')
-  Object.keys(schema.gameplay).forEach(function (key) {
-    createConfigField(key)
-  })
+  
+  var world = new World(schema.tiles, {thickness: 0.75})
 
-  function createConfigField (key) {
-    var fieldset = document.createElement('fieldset')
-
-    var label = document.createElement('label')
-    label.setAttribute('for', 'gameplay-' + key)
-    label.innerHTML = key
-
-    var input = document.createElement('input')
-    input.type = 'text'
-    input.className = 'gameplay-config'
-    input.name = 'gameplay-' + key
-    input.id = 'gameplay-config-' + key
-    input.value = schema.gameplay[key]
-
-    fieldset.appendChild(label)
-    fieldset.appendChild(input)
-    gameplay.appendChild(fieldset)
-
-    input.addEventListener('input', function (e) {
-      var value = e.target.value
-      schema.gameplay[key] = Number(value)
-    })
-  }
-
-  var opts = {thickness: 0.75}
-
-  var world = new World(schema.tiles, opts)
-
-  var opts = {thickness: 0.75}
-
-  var player = new Player(schema.players[0], {
+  var player = new Player({
     scale: 2,
+    translation: [0, 0],
+    rotation: 0,
+    character: 'mouse',
     speed: {translation: 1, rotation: 8},
     friction: 0.9,
     stroke: 'white',
@@ -340,7 +312,7 @@ module.exports = function(canvas, opts) {
 
   function rebuildGame() {
     world.reload(schema.tiles)
-    player.reload(schema.players[0])
+    player.moveto(schema.gameplay.start)
   }
 
   function drawEditor() {
@@ -350,16 +322,6 @@ module.exports = function(canvas, opts) {
     player.draw(context, camera)
   }
 
-  function updateConfig (schema) {
-    Object.keys(schema.gameplay).forEach(function (key) {
-      var config = document.getElementById('gameplay-config-' + key)
-      if (config) {
-        config.value = schema.gameplay[key]
-      } else {
-        createConfigField(key)
-      }
-    })
-  }
 
   drawEditor()
 
@@ -377,13 +339,6 @@ module.exports = function(canvas, opts) {
       schema = updated
       rebuildGame()
       drawEditor()
-      updateConfig(schema)
-    },
-    reset: function() {
-      schema = base()
-      rebuildGame()
-      drawEditor()
-      updateConfig(base())
     }
   }
 }
