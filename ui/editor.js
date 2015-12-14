@@ -51,8 +51,8 @@ module.exports = function(canvas, schema, opts) {
       return hex({
         fill: c,
         stroke: c, 
-        thickness: 3, 
-        scale: size/8
+        scale: size / 5,
+        thickness: 3
       })
     }),
 
@@ -65,7 +65,7 @@ module.exports = function(canvas, schema, opts) {
         fill: c,
         stroke: 'white', 
         thickness: 3, 
-        scale: size/8
+        scale: size / 8
       })
     }),
   }
@@ -153,6 +153,24 @@ module.exports = function(canvas, schema, opts) {
     })
   })
 
+  _.forEach(document.getElementsByClassName('landmark-icon'), function(icon) {
+    icon.addEventListener('click', function (item) {
+      var d
+      var f = 1.6
+      if (item.offsetY > 0 && item.offsetY < size) {
+        if (item.offsetX >= size/2 && item.offsetX < size) d = f
+        if (item.offsetX > 0 && item.offsetX < size/2) d = 1 / f
+      } 
+      if (d) {
+        var id = parseInt(icon.id.split('-')[1])
+        if (d > 1 & icons.landmark[id].transform.scale >= (size / 5) * f) return
+        if (d < 1 & icons.landmark[id].transform.scale <= (size / 5) * (1 / f)) return
+        icons.landmark[id].update({scale: d})
+        drawIcon(id, 'landmark')
+      }
+    })
+  })
+
   _.forEach(document.getElementsByClassName('player-icon'), function(icon) {
     icon.addEventListener('click', function (item) {
       var d
@@ -199,7 +217,7 @@ module.exports = function(canvas, schema, opts) {
       var target = event.target
       var position = getPosition(event)
       if (position) {
-        var q = Math.round(position[0] * 2/3 / 50)
+        var q = Math.round(position[0] * 2 / 3 / 50)
         var r = Math.round((-position[0] / 3 + Math.sqrt(3)/3 * position[1]) / 50)
         var location = _.findIndex(schema.tiles, function(item) {
           return item.translation[0] === q && item.translation[1] === r 
@@ -218,7 +236,11 @@ module.exports = function(canvas, schema, opts) {
         if (target.className.split(' ')[0] == 'landmark-icon') {
           var id = parseInt(target.id.split('-')[1])
           if (location > -1) {
-            schema.tiles[location].cue = {fill: cues[id]}
+            var f = 1.6
+            var scale = 2
+            if (icons.landmark[id].transform.scale >= (size / 5) * f) scale = 3
+            if (icons.landmark[id].transform.scale <= (size / 5) * 1 / f) scale = 1
+            schema.tiles[location].cue = {fill: cues[id], scale: scale}
           }
           rebuildGame()
         }
