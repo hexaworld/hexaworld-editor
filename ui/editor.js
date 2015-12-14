@@ -35,7 +35,7 @@ module.exports = function(canvas, schema, opts) {
   ]
 
   var groups = [4, 8]
-  var size = opts.width / 9
+  var size = opts.width / 10
 
   var icons = {
 

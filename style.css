@@ -37,7 +37,7 @@ input {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 45%;
+  width: 47%;
   height: 100%;
   left: 15%;
   top: 0;
@@ -46,7 +46,7 @@ input {
 
 #wrapper {
   left: 15%;
-  width: 45%;
+  width: 47%;
   position: relative;
 }
 
@@ -72,7 +72,7 @@ input {
 }
 
 #sidebar {
-  width: 40%;
+  width: 37%;
   height: 100%;
   position: absolute;
   right: 0;
