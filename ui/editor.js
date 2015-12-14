@@ -38,7 +38,6 @@ module.exports = function(canvas, schema, opts) {
   var size = opts.width / 10
 
   var icons = {
-
     tile: paths.map( function (p) {
       return tile({
         translation: [0, 0],
@@ -69,7 +68,6 @@ module.exports = function(canvas, schema, opts) {
         scale: size/8
       })
     }),
-
   }
 
   var mask = new Mask({
@@ -229,16 +227,24 @@ module.exports = function(canvas, schema, opts) {
           if (location > -1) {
             delete schema.tiles[location].cue
             delete schema.tiles[location].target
+            if (schema.start.length > 1) {
+              _.remove(schema.start, function (start) {
+                return _.isEqual(start.translation, [q, r])
+              })
+            }
           }
           rebuildGame()
         }
       
         if (target.className.split(' ')[0] === 'player-icon') {
           if (location > -1) {
-            schema.gameplay.start = {
+            _.remove(schema.start, function (start) {
+              return _.isEqual(start.translation, [q, r])
+            })
+            schema.start.push({
               translation: [q, r],
               rotation: icons.player[0].transform.rotation
-            }
+            })
           }
           rebuildGame()
         }
@@ -247,7 +253,7 @@ module.exports = function(canvas, schema, opts) {
           var id = parseInt(target.id.split('-')[1])
           if (location > -1) {
             schema.tiles[location].target = {fill: targets[id]}
-            schema.gameplay.target = [q, r]
+            schema.target = [q, r]
           }
           rebuildGame()
         }
@@ -268,8 +274,6 @@ module.exports = function(canvas, schema, opts) {
   })
   camera.game = {width: editor.width, height: editor.height}
 
-  var gameplay = document.getElementById('gameplay')
-  
   var world = new World(schema.tiles, {thickness: 0.75})
 
   var player = new Player({
@@ -312,16 +316,18 @@ module.exports = function(canvas, schema, opts) {
 
   function rebuildGame() {
     world.reload(schema.tiles)
-    player.moveto(schema.gameplay.start)
+    
   }
 
   function drawEditor() {
     var context = editor.getContext('2d')
     context.clearRect(0, 0, editor.width, editor.height)
     world.draw(context, camera)
-    player.draw(context, camera)
+    schema.start.forEach(function (start) {
+      player.moveto(start)
+      player.draw(context, camera)
+    })
   }
-
 
   drawEditor()
 

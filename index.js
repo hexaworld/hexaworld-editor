@@ -11,7 +11,7 @@ var height = editorContainer.clientHeight
 var offset = selectorContainer.clientWidth
 
 var selected = 0
-var init = [base(), base()]
+var init = [base()]
 var maps = maps('maps', init)
 
 var init = {name: 'welcome', lives: 3, steps: 6}

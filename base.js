@@ -25,10 +25,7 @@ module.exports = function() {
       {translation: [2, 0]},
       {translation: [2, 1]}
     ],
-    gameplay: {
-      start: {translation: [0, 0], rotation: 0},
-      target: [],
-      sight: 150
-    }
+    start: [{translation: [0, 0], rotation: 0}],
+    target: []
   } 
 }
