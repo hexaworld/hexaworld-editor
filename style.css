@@ -41,18 +41,27 @@ input {
   height: 100%;
   left: 15%;
   top: 0;
+  padding-top: 0%;
   position: absolute;
 }
 
 #wrapper {
+  padding-top: 5%;
   left: 15%;
   width: 47%;
   position: relative;
 }
 
 #game-container {
-  height: 100%;
+  height: 90%;
   margin: 0 auto;
+  display: block;
+}
+
+#play-container {
+  height: 90%;
+  margin: 0 auto;
+  display: block;
 }
 
 #selector {
@@ -72,7 +81,7 @@ input {
 }
 
 #sidebar {
-  width: 37%;
+  width: 38%;
   height: 100%;
   position: absolute;
   right: 0;
@@ -110,13 +119,19 @@ input {
 }
 
 .button-edit {
-  left: 40px;
+  left: 115px;
+  top: 35px;
+  position: absolute;
+}
+
+.button-game {
+  left: 182px;
   top: 35px;
   position: absolute;
 }
 
 .button-play {
-  left: 107px;
+  left: 248px;
   top: 35px;
   position: absolute;
 }
@@ -134,7 +149,7 @@ input {
 }
 
 .button-reset {
-  left: 175px;
+  left: 40px;
   top: 35px;
   position: absolute;
 }
@@ -178,62 +193,6 @@ input {
 .button-row {
   margin-bottom: 30px;
   width: 150px;
-}
-
-/*
-* popup styles */
-
-.popupjs-background {
-  background-color: rgba(0, 0, 0, 0.8);
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  z-index: 2000;
-}
-
-.popupjs-wrapper {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  border: 1px solid #efefea;
-  padding: 10px;
-  background-color: rgb(100, 100, 100);
-}
-
-.popupjs-close {
-  border: 0px;
-  color: #fff;
-  position: relative;
-  display: block;
-  float: right;
-  cursor: pointer;
-  font-size: 25px;
-  background-color: rgb(100, 100, 100);
-}
-
-.popupjs-content {
-  clear: both;
-  padding: 20px 50px 10px;
-  text-align: center;
-}
-
-.popupjs-actions {
-  padding: 0px 50px 50px;
-}
-
-.popupjs-content .text-input {
-  border: 1px solid #fff;
-  padding: 5px;
-  color: #fff;
-}
-
-.popupjs-actions button {
-  color: #fff;
-}
-
-.popupjs-content h2 {
-  margin: 0px 0px 10px 0px;
 }
 
 /*

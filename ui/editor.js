@@ -298,6 +298,7 @@ module.exports = function(canvas, schema, opts) {
     friction: 1,
   })
   camera.game = {width: editor.width, height: editor.height}
+  camera.transform.translation[1] -= 20
 
   var world = new World(schema.tiles, {thickness: 0.75})
 

@@ -26,6 +26,7 @@ module.exports = function() {
       {translation: [2, 1]}
     ],
     start: [{translation: [0, 0], rotation: 0}],
-    target: []
+    target: [],
+    flash: ['#FF5050', '#FF8900', '#00C3EE', '#64FF00']
   } 
 }
