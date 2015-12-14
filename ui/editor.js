@@ -239,7 +239,10 @@ module.exports = function(canvas, schema, opts) {
             var f = 1.6
             var scale = 2
             if (icons.landmark[id].transform.scale >= (size / 5) * f) scale = 3
-            if (icons.landmark[id].transform.scale <= (size / 5) * 1 / f) scale = 1
+            if (icons.landmark[id].transform.scale <= (size / 5) * (1 / f)) scale = 1
+            console.log(scale)
+          console.log(icons.landmark[id].transform.scale)
+          console.log((size / 5) * 1 / f)
             schema.tiles[location].cue = {fill: cues[id], scale: scale}
           }
           rebuildGame()
