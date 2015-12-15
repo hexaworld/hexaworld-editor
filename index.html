@@ -6,15 +6,40 @@
 </head>
 <body>
 
+
 <div id='editor-container'>
 	<canvas id='editor'></canvas>
 	<div class='button button-edit' id='button-edit'>edit</div>
-	<div class='button button-play' id='button-play'>play</div>
 	<div class='button button-reset' id='button-reset'>reset</div>
+	<div class='button button-game' id='button-game'>game</div>
+	<div class='button button-play' id='button-play'>play</div>
 </div>
 
 <div id='wrapper'>
 	<div id='game-container'></div>
+	<div id='play-container'></div>
+</div>
+
+<div id='selector'>
+
+	<div id='selector-inner'>
+		<div>
+			<span class='button button-save' id='button-save'>save</span>
+			<a id='button-save-download'></a>
+			<input type='file' name='button-load' id='button-load' style='display: none'></input>
+			<label for='button-load' class='button button-load' id='button-load-label'>load</label>
+		</div>
+
+		<div id='config'>
+			<h2>CONFIG</h2>
+		</div>
+
+		<div id='maps'>
+			<h2>MAPS</h2>
+		</div>
+
+	</div>
+
 </div>
 
 <div id='sidebar'>
@@ -27,17 +52,6 @@
 
 		<div id='item'>
 			<h2>ITEMS</h2>
-		</div>
-
-    <div id='gameplay'>
-      <h2>GAMEPLAY</h2>
-    </div>
-
-		<div>
-			<span class='button button-save' id='button-save'>save</span>
-			<a id='button-save-download'></a>
-			<input type='file' name='button-load' id='button-load' style='display: none'></input>
-			<label for='button-load' class='button button-load' id='button-load-label'>load</label>
 		</div>
 
 	</div>

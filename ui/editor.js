@@ -1,7 +1,6 @@
 var _ = require('lodash')
 var interact = require('interact.js')
 var transform = require('transformist')
-var base = require('./base.js')
 var tile = require('hexaworld/geometry/tile.js')
 var circle = require('hexaworld/geometry/circle.js')
 var hex = require('hexaworld/geometry/hex.js')
@@ -12,7 +11,7 @@ var Player = require('hexaworld/entity/player.js')
 var Camera = require('hexaworld/entity/camera.js')
 var Keyboard = require('crtrdg-keyboard')
 
-module.exports = function(canvas, opts) {
+module.exports = function(canvas, schema, opts) {
   var editor = document.getElementById(canvas)
   editor.setAttribute('width', opts.width + 'px')
   editor.setAttribute('height', opts.height + 'px')
@@ -36,10 +35,9 @@ module.exports = function(canvas, opts) {
   ]
 
   var groups = [4, 8]
-  var size = opts.width / 12
+  var size = opts.width / 10.5
 
   var icons = {
-
     tile: paths.map( function (p) {
       return tile({
         translation: [0, 0],
@@ -53,8 +51,8 @@ module.exports = function(canvas, opts) {
       return hex({
         fill: c,
         stroke: c, 
-        thickness: 3, 
-        scale: size/8
+        scale: size / 5,
+        thickness: 3
       })
     }),
 
@@ -67,10 +65,9 @@ module.exports = function(canvas, opts) {
         fill: c,
         stroke: 'white', 
         thickness: 3, 
-        scale: size/8
+        scale: size / 8
       })
     }),
-
   }
 
   var mask = new Mask({
@@ -128,7 +125,7 @@ module.exports = function(canvas, opts) {
   })
 
   function getPosition(event) {
-    var x = event.pageX - editor.width/2
+    var x = event.pageX - editor.width/2 - opts.offset
     var y = event.pageY - editor.height/2
     if (_.all([x > -editor.width/2, x < editor.width/2, y > -editor.height/2, y < editor.height/2])) {
       return camera.transform.apply([[x, y]])[0]
@@ -156,9 +153,26 @@ module.exports = function(canvas, opts) {
     })
   })
 
+  _.forEach(document.getElementsByClassName('landmark-icon'), function(icon) {
+    icon.addEventListener('click', function (item) {
+      var d
+      var f = 1.6
+      if (item.offsetY > 0 && item.offsetY < size) {
+        if (item.offsetX >= size/2 && item.offsetX < size) d = f
+        if (item.offsetX > 0 && item.offsetX < size/2) d = 1 / f
+      } 
+      if (d) {
+        var id = parseInt(icon.id.split('-')[1])
+        if (d > 1 & icons.landmark[id].transform.scale >= (size / 5) * f) return
+        if (d < 1 & icons.landmark[id].transform.scale <= (size / 5) * (1 / f)) return
+        icons.landmark[id].update({scale: d})
+        drawIcon(id, 'landmark')
+      }
+    })
+  })
+
   _.forEach(document.getElementsByClassName('player-icon'), function(icon) {
     icon.addEventListener('click', function (item) {
-      console.log('clicked player')
       var d
       if (item.offsetY > 0 && item.offsetY < size) {
         if (item.offsetX >= size/2 && item.offsetX < size) d = 1
@@ -203,7 +217,7 @@ module.exports = function(canvas, opts) {
       var target = event.target
       var position = getPosition(event)
       if (position) {
-        var q = Math.round(position[0] * 2/3 / 50)
+        var q = Math.round(position[0] * 2 / 3 / 50)
         var r = Math.round((-position[0] / 3 + Math.sqrt(3)/3 * position[1]) / 50)
         var location = _.findIndex(schema.tiles, function(item) {
           return item.translation[0] === q && item.translation[1] === r 
@@ -222,7 +236,14 @@ module.exports = function(canvas, opts) {
         if (target.className.split(' ')[0] == 'landmark-icon') {
           var id = parseInt(target.id.split('-')[1])
           if (location > -1) {
-            schema.tiles[location].cue = {fill: cues[id]}
+            var f = 1.6
+            var scale = 2
+            if (icons.landmark[id].transform.scale >= (size / 5) * f) scale = 3
+            if (icons.landmark[id].transform.scale <= (size / 5) * (1 / f)) scale = 1
+            console.log(scale)
+          console.log(icons.landmark[id].transform.scale)
+          console.log((size / 5) * 1 / f)
+            schema.tiles[location].cue = {fill: cues[id], scale: scale}
           }
           rebuildGame()
         }
@@ -231,14 +252,24 @@ module.exports = function(canvas, opts) {
           if (location > -1) {
             delete schema.tiles[location].cue
             delete schema.tiles[location].target
+            if (schema.start.length > 1) {
+              _.remove(schema.start, function (start) {
+                return _.isEqual(start.translation, [q, r])
+              })
+            }
           }
           rebuildGame()
         }
       
         if (target.className.split(' ')[0] === 'player-icon') {
           if (location > -1) {
-            schema.players[0].translation = [q, r]
-            schema.players[0].rotation = icons.player[0].transform.rotation
+            _.remove(schema.start, function (start) {
+              return _.isEqual(start.translation, [q, r])
+            })
+            schema.start.push({
+              translation: [q, r],
+              rotation: icons.player[0].transform.rotation
+            })
           }
           rebuildGame()
         }
@@ -247,6 +278,7 @@ module.exports = function(canvas, opts) {
           var id = parseInt(target.id.split('-')[1])
           if (location > -1) {
             schema.tiles[location].target = {fill: targets[id]}
+            schema.target = [q, r]
           }
           rebuildGame()
         }
@@ -266,45 +298,15 @@ module.exports = function(canvas, opts) {
     friction: 1,
   })
   camera.game = {width: editor.width, height: editor.height}
+  camera.transform.translation[1] -= 20
 
-  var schema = base()
-  var gameplay = document.getElementById('gameplay')
-  Object.keys(schema.gameplay).forEach(function (key) {
-    createConfigField(key)
-  })
+  var world = new World(schema.tiles, {thickness: 0.75})
 
-  function createConfigField (key) {
-    var fieldset = document.createElement('fieldset')
-
-    var label = document.createElement('label')
-    label.setAttribute('for', 'gameplay-' + key)
-    label.innerHTML = key
-
-    var input = document.createElement('input')
-    input.type = 'text'
-    input.className = 'gameplay-config'
-    input.name = 'gameplay-' + key
-    input.id = 'gameplay-config-' + key
-    input.value = schema.gameplay[key]
-
-    fieldset.appendChild(label)
-    fieldset.appendChild(input)
-    gameplay.appendChild(fieldset)
-
-    input.addEventListener('input', function (e) {
-      var value = e.target.value
-      schema.gameplay[key] = Number(value)
-    })
-  }
-
-  var opts = {thickness: 0.75}
-
-  var world = new World(schema.tiles, opts)
-
-  var opts = {thickness: 0.75}
-
-  var player = new Player(schema.players[0], {
+  var player = new Player({
     scale: 2,
+    translation: [0, 0],
+    rotation: 0,
+    character: 'mouse',
     speed: {translation: 1, rotation: 8},
     friction: 0.9,
     stroke: 'white',
@@ -340,24 +342,16 @@ module.exports = function(canvas, opts) {
 
   function rebuildGame() {
     world.reload(schema.tiles)
-    player.reload(schema.players[0])
+    
   }
 
   function drawEditor() {
     var context = editor.getContext('2d')
     context.clearRect(0, 0, editor.width, editor.height)
     world.draw(context, camera)
-    player.draw(context, camera)
-  }
-
-  function updateConfig (schema) {
-    Object.keys(schema.gameplay).forEach(function (key) {
-      var config = document.getElementById('gameplay-config-' + key)
-      if (config) {
-        config.value = schema.gameplay[key]
-      } else {
-        createConfigField(key)
-      }
+    schema.start.forEach(function (start) {
+      player.moveto(start)
+      player.draw(context, camera)
     })
   }
 
@@ -377,13 +371,6 @@ module.exports = function(canvas, opts) {
       schema = updated
       rebuildGame()
       drawEditor()
-      updateConfig(schema)
-    },
-    reset: function() {
-      schema = base()
-      rebuildGame()
-      drawEditor()
-      updateConfig(base())
     }
   }
 }
