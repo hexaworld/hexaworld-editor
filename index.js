@@ -15,7 +15,7 @@ var selected = 0
 var init = [base()]
 var maps = maps('maps', init)
 
-var init = {name: 'welcome', lives: 3, moves: 6}
+var init = {name: 'welcome', lives: 3, moves: 6, difficulty: 1}
 var config = config('config', init)
 
 var edit = editor('editor', maps.get(selected), {width: width, height: height, offset: offset})
