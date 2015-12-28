@@ -49,6 +49,7 @@ document.getElementById('button-edit').onclick = function (event) {
 document.getElementById('button-game').onclick = function (event) {
   game.reload(maps.get(selected))
   game.resume()
+  game.show()
   play.pause()
   edit.pause()
   setTimeout(function() {
