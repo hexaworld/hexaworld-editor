@@ -53,13 +53,13 @@ input {
 }
 
 #game-container {
-  height: 90%;
+  height: 85%;
   margin: 0 auto;
   display: block;
 }
 
 #play-container {
-  height: 90%;
+  height: 85%;
   margin: 0 auto;
   display: block;
 }
